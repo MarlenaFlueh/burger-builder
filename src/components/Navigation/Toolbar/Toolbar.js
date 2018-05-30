@@ -4,11 +4,12 @@ import classes from "./Toolbar.css";
 import Logo from "../../Logo/Logo";
 import NavigationItems from "../NavigationItems/Navigationitems";
 import Backdrop from "../../UI/Backdrop/Backdrop";
+import DrawerToggle from "../SideDrawer/DrawerToggle/DrawerToggle";
 
 const toolbar = props => (
   <header className={classes.Toolbar}>
     <Backdrop />
-    <div>MENU</div>
+    <DrawerToggle clicked={props.openedDrawer} />
     <div className={classes.Logo}>
       <Logo />
     </div>
