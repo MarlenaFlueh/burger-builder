@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "../../UI/Button/Button";
-import Aut from "../../../hoc/Aut";
+import Aut from "../../../hoc/Aut/Aut";
 
 const orderSummary = props => {
   const ingredientsSummary = Object.keys(props.ingredients).map(
