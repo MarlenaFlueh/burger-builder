@@ -5,8 +5,11 @@ import Aut from "../../../hoc/Aut/Aut";
 import Backdrop from "../Backdrop/Backdrop";
 
 class Modal extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.show !== nextProps.show;
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.show !== nextProps.show ||
+      nextProps.children !== this.props.children
+    );
   }
 
   render() {
