@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 import Aut from "../../hoc/Aut/Aut";
 import Burger from "../../components/Burger/Burger";
@@ -95,6 +96,7 @@ class BurgerBuilder extends Component {
 
       await axios.post("/orders.json", order);
       this.setState({ loading: false, purchasing: false });
+      this.props.history.push("/checkout");
     } catch (e) {
       this.setState({ loading: false, purchasing: false });
       console.log(e);
@@ -155,4 +157,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgerBuilder, axios);
+export default withRouter(withErrorHandler(BurgerBuilder, axios));
