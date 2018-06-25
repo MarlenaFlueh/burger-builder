@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
-          <Route path="/orders" component={Orders}
+          <Route path="/orders" component={Orders} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/" component={BurgerBuilder} />
         </Switch>
