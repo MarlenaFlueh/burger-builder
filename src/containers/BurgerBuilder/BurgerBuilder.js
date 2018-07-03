@@ -13,7 +13,6 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 class BurgerBuilder extends Component {
   state = {
-    purchasable: false,
     purchasing: false,
     loading: false,
     error: false
@@ -28,14 +27,14 @@ class BurgerBuilder extends Component {
   //   }
   // }
 
-  updatePurchaseState = ingredients => {
+  updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
       .map(key => ingredients[key])
       .reduce((arr, currentValue) => {
         return arr + currentValue;
       }, 0);
-    this.setState({ purchasable: sum > 0 });
-  };
+    return sum > 0;
+  }
 
   purchaseHandler = () => this.setState({ purchasing: true });
 
@@ -78,7 +77,7 @@ class BurgerBuilder extends Component {
             ingredientAdded={this.props.onAddIngredientHandler}
             ingredientRemoved={this.props.onRemoveIngredientHandler}
             disabled={disabledInfo}
-            purchasable={this.state.purchasable}
+            purchasable={this.updatePurchaseState(this.props.ingr)}
             price={this.props.totPrice}
             ordered={this.purchaseHandler}
           />
