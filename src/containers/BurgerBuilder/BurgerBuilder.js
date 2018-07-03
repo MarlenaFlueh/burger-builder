@@ -20,7 +20,6 @@ const ingredientPrices = {
 
 class BurgerBuilder extends Component {
   state = {
-    totalPrice: 8,
     purchasable: false,
     purchasing: false,
     loading: false,
@@ -114,14 +113,14 @@ class BurgerBuilder extends Component {
             ingredientRemoved={this.props.onRemoveIngredientHandler}
             disabled={disabledInfo}
             purchasable={this.state.purchasable}
-            price={this.state.totalPrice}
+            price={this.props.totPrice}
             ordered={this.purchaseHandler}
           />
         </Aut>
       );
       orderSummary = (
         <OrderSummary
-          price={this.state.totalPrice.toFixed(2)}
+          price={this.props.totPrice.toFixed(2)}
           ingredients={this.props.ingr}
           purchaseCancelled={this.purchaseCancelHandler}
           purchaseContinued={this.purchaseContinueHandler}
