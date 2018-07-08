@@ -13,19 +13,12 @@ import * as burgerBuilderActions from "../../store/actions/index";
 
 class BurgerBuilder extends Component {
   state = {
-    purchasing: false,
-    loading: false,
-    error: false
+    purchasing: false
   };
 
-  // async componentDidMount() {
-  //   try {
-  //     const res = await axios.get("/ingredients.json");
-  //     this.setState({ ingredients: res.data });
-  //   } catch (e) {
-  //     return this.setState({ error: true });
-  //   }
-  // }
+  componentDidMount() {
+    this.props.onInitIngredientsHandler();
+  }
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
@@ -51,7 +44,7 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingredients can't be found.</p>
     ) : (
       <Spinner />
@@ -80,9 +73,6 @@ class BurgerBuilder extends Component {
         />
       );
     }
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
 
     return (
       <Aut>
@@ -101,7 +91,8 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
   return {
     ingr: state.ingredients,
-    totPrice: state.totalPrice
+    totPrice: state.totalPrice,
+    err: state.error
   };
 };
 
@@ -109,7 +100,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onAddIngredientHandler: food => dispatch(burgerBuilderActions.add(food)),
     onRemoveIngredientHandler: food =>
-      dispatch(burgerBuilderActions.remove(food))
+      dispatch(burgerBuilderActions.remove(food)),
+    onInitIngredientsHandler: () =>
+      dispatch(burgerBuilderActions.initIngredients())
   };
 };
 
