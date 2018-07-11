@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from "../utils";
 
 const initialState = {
   ingredients: null,
@@ -14,16 +15,23 @@ const ingredientPrices = {
 };
 
 const reducer = (state = initialState, action) => {
+  // in my opinion ugly to use the updateObject function
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      return {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.foodType]: state.ingredients[action.foodType] + 1
-        },
+      const updatedIngredient = {
+        [action.foodType]: state.ingredients[action.foodType] + 1
+      };
+      const updatedIngredients = updateObject(
+        state.ingredients,
+        updatedIngredient
+      );
+      const updatedState = {
+        ingredients: updatedIngredients,
         totalPrice: state.totalPrice + ingredientPrices[action.foodType]
       };
+      return updateObject(state, updatedState);
+
+    // it's shorter without updateObject and it's less complicate to reads
     case actionTypes.REMOVE_INGREDIENT:
       return {
         ...state,
