@@ -211,9 +211,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    ingr: state.ingredients,
-    totPrice: state.totalPrice,
-    loading: state.loading
+    ingr: state.burgerBuilder.ingredients,
+    totPrice: state.burgerBuilder.totalPrice,
+    loading: state.order.loading
   };
 };
 
