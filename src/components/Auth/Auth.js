@@ -5,6 +5,7 @@ import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import classes from "./Auth.css";
 import * as actions from "../../store/actions/index";
+import Spinner from "../UI/Spinner/Spinner";
 
 class Auth extends Component {
   state = {
@@ -111,7 +112,7 @@ class Auth extends Component {
       });
     }
 
-    const input = loginFormArray.map(input => (
+    let input = loginFormArray.map(input => (
       <Input
         key={input.id}
         elementType={input.config.elementType}
@@ -123,9 +124,18 @@ class Auth extends Component {
         touched={input.config.touched}
       />
     ));
+    if (this.props.loading) {
+      input = <Spinner />;
+    }
+
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = <p>{this.props.error.message}</p>;
+    }
 
     return (
       <div className={classes.LoginData}>
+        {errorMessage}
         <form onSubmit={this.submitHandler}>
           {input}
           <Button btnType="Success">Submit</Button>
@@ -138,6 +148,13 @@ class Auth extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onAuthentification: (email, password, isSignup) =>
@@ -146,6 +163,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Auth);
