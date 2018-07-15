@@ -126,30 +126,21 @@ class ContactData extends Component {
     return isValid;
   }
 
-  orderHandler = async event => {
+  orderHandler = event => {
     event.preventDefault();
 
-    try {
-      const formData = {};
-      for (let key in this.state.orderForm) {
-        formData[key] = this.state.orderForm[key].value;
-      }
-
-      const order = {
-        ingredients: this.props.ingr,
-        price: this.props.totPrice,
-        orderData: formData
-      };
-
-      this.props.onOrderBurger(order);
-
-      await axios.post("/orders.json", order);
-      this.setState({ loading: false });
-      this.props.history.push("/");
-    } catch (e) {
-      this.setState({ loading: false });
-      console.log(e);
+    const formData = {};
+    for (let key in this.state.orderForm) {
+      formData[key] = this.state.orderForm[key].value;
     }
+
+    const order = {
+      ingredients: this.props.ingr,
+      price: this.props.totPrice,
+      orderData: formData
+    };
+
+    this.props.onOrderBurger(order, this.props.token);
   };
 
   inputChangeHandler = (event, key) => {
@@ -219,19 +210,19 @@ class ContactData extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onOrderBurger: orderData =>
-      dispatch(actionCreators.purchaseBurger(orderData, this.props.token))
-  };
-};
-
 const mapStateToProps = state => {
   return {
     ingr: state.burgerBuilder.ingredients,
     totPrice: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
     token: state.auth.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: (orderData, token) =>
+      dispatch(actionCreators.purchaseBurger(orderData, token))
   };
 };
 
