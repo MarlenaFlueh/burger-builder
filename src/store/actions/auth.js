@@ -23,6 +23,9 @@ export const authFail = error => {
 };
 
 export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("expirationTime");
+  localStorage.removeItem("userId");
   return {
     type: actionTypes.AUTH_LOGOUT
   };
@@ -43,6 +46,28 @@ const authTimeoutHandler = expirationTime => {
   };
 };
 
+export const authCheckHandler = () => {
+  return dispatch => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      dispatch(logout());
+    } else {
+      const expirationTime = new Date(localStorage.getItem("expirationTime"));
+      if (expirationTime > new Date()) {
+        dispatch(logout());
+      } else {
+        const userId = localStorage.getItem("userId");
+        dispatch(authSuccess(token, userId));
+        dispatch(
+          authTimeoutHandler(
+            expirationTime.getSeconds() - new Date().getSeconds()
+          )
+        );
+      }
+    }
+  };
+};
+
 export const auth = (email, password, isSignup) => {
   return async dispatch => {
     dispatch(authStart());
@@ -59,6 +84,12 @@ export const auth = (email, password, isSignup) => {
           "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCgOyUXPFtXeHGI7Ttcjbh9BaMPQqu5PRE";
       }
       const res = await axios.post(url, authData);
+      const expirationTime = new Date(
+        new Date().getTime() + res.data.expiresIn * 1000
+      );
+      localStorage.setItem("token", res.data.idToken);
+      localStorage.setItem("expirationTime", expirationTime);
+      localStorage.setItem("userId", res.data.localId);
       dispatch(authSuccess(res.data.idToken, res.data.localId));
       dispatch(authTimeoutHandler(res.data.expiresIn));
       console.log(res);
